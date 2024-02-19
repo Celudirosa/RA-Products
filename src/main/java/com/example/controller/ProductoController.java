@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -80,21 +81,23 @@ public class ProductoController {
 
     }
 
+    @PutMapping("/productos/{id}")
+    public ResponseEntity<Producto> updateProducto(
+        @PathVariable("id") int id,
+        @RequestBody Producto producto
+    ) {
+        Producto _producto = productoRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("Nor found Producto with id = " + id));
+        
+        _producto.setName(producto.getName());
+        _producto.setDescription(producto.getDescription());
+        _producto.setStock(producto.getStock());
+        _producto.setPrice(producto.getPrice());
+        _producto.setPresentaciones(producto.getPresentaciones());
 
+        return new ResponseEntity<>(productoRepository.save(_producto), HttpStatus.OK);
 
+    }
 
-
-
-//   @PutMapping("/tutorials/{id}")
-//   public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
-//     Tutorial _tutorial = tutorialRepository.findById(id)
-//         .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
-
-//     _tutorial.setTitle(tutorial.getTitle());
-//     _tutorial.setDescription(tutorial.getDescription());
-//     _tutorial.setPublished(tutorial.isPublished());
-    
-//     return new ResponseEntity<>(tutorialRepository.save(_tutorial), HttpStatus.OK);
-//   }
 
 }
