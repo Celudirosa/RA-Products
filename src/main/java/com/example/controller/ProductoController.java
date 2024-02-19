@@ -109,6 +109,11 @@ public class ProductoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    public ResponseEntity<HttpStatus> deleteAllProductos() {
+        productoRepository.deleteAll();
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 
 
@@ -118,12 +123,6 @@ public class ProductoController {
 
 
 
-//   @DeleteMapping("/tutorials")
-//   public ResponseEntity<HttpStatus> deleteAllTutorials() {
-//     tutorialRepository.deleteAll();
-    
-//     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//   }
 
 //   @GetMapping("/tutorials/published")
 //   public ResponseEntity<List<Tutorial>> findByPublished() {
