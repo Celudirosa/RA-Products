@@ -115,25 +115,4 @@ public class ProductoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
-
-
-
-
-
-
-
-
-//   @GetMapping("/tutorials/published")
-//   public ResponseEntity<List<Tutorial>> findByPublished() {
-//     List<Tutorial> tutorials = tutorialRepository.findByPublished(true);
-
-//     if (tutorials.isEmpty()) {
-//       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//     }
-    
-//     return new ResponseEntity<>(tutorials, HttpStatus.OK);
-//   }
-// }
-
 }
