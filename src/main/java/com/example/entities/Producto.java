@@ -56,4 +56,9 @@ public class Producto implements Serializable {
     })
     private Set<Presentacion> presentaciones = new HashSet<>();
 
+    // Método para agregar una presentación al conjunto de presentaciones
+    public void addPresentacion(Presentacion presentacion) {
+        this.presentaciones.add(presentacion);
+        presentacion.getProductos().add(this);
+    }
 }

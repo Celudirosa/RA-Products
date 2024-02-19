@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,12 +49,59 @@ public class PresentacionController {
     public ResponseEntity<List<Presentacion>> getAllPresentacionesByProductoId(
             @PathVariable(value = "productoId") Integer productoId) {
         if (!productoRepository.existsById(productoId)) {
-            throw new ResourceNotFoundException("Not found Tutorial with id = " + productoId);
+            throw new ResourceNotFoundException("Not found Producto with id = " + productoId);
         }
 
-        List<Presentacion> presentaciones = presentacionRepository.findPresentaciones   ByProductosId(productoId);
+        List<Presentacion> presentaciones = presentacionRepository.findPresentacionesByProductosId(productoId);
         return new ResponseEntity<>(presentaciones, HttpStatus.OK);
     }
 
+    @GetMapping("/presentaciones/{id}")
+    public ResponseEntity<Presentacion> getPresentacionById(@PathVariable(value = "id") Integer id) {
+        @SuppressWarnings("null")
+        Presentacion presentacion = presentacionRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Not found Presentacion with id = " + id));
+
+        return new ResponseEntity<>(presentacion, HttpStatus.OK);
+    }
+
+    @SuppressWarnings("null")
+    @GetMapping("/presentaciones/{presentacionId}/productos")
+    public ResponseEntity<List<Producto>> getAllProductosByPresentacionId(
+            @PathVariable(value = "presentacionId") Integer presentacionId) {
+        if (!presentacionRepository.existsById(presentacionId)) {
+            throw new ResourceNotFoundException("Not found Presentacion  with id = " + presentacionId);
+        }
+
+        List<Producto> productos = productoRepository.findProductosByPresentacionesId(presentacionId);
+
+        return new ResponseEntity<>(productos, HttpStatus.OK);
+    }
+
+    @PostMapping("/productos/{productoId}/presentaciones")
+    public ResponseEntity<Presentacion> addPresentacion(
+            @PathVariable(value = "productoId") Integer productoId, 
+            @RequestBody Presentacion presentacionRequest) {
+
+        @SuppressWarnings("null")
+        Presentacion presentacion = productoRepository.findById(productoId).map(producto -> {
+            int presentacionId = presentacionRequest.getId();
+
+            // presentacion existed
+            if (presentacionId != 0L) {
+                Presentacion _presentacion = presentacionRepository.findById(presentacionId).orElseThrow(
+                        () -> new ResourceNotFoundException("Not found Presentacion with id = " + presentacionId));
+                    producto.addPresentacion(_presentacion);
+                    productoRepository.save(producto);
+                    return _presentacion;
+            }
+             // add and create new presentacion
+            producto.addPresentacion(presentacionRequest);
+            return presentacionRepository.save(presentacionRequest);
+
+            }).orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + productoId));
+
+        return new ResponseEntity<>(presentacion, HttpStatus.CREATED);
+    }
 
 }
