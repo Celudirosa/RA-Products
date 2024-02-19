@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -99,5 +100,41 @@ public class ProductoController {
 
     }
 
+    @DeleteMapping("/productos/{id}")
+    public ResponseEntity<HttpStatus> deleteProducto(
+        @PathVariable("id") int id) {
+
+        productoRepository.deleteById(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+
+
+
+
+
+
+
+
+//   @DeleteMapping("/tutorials")
+//   public ResponseEntity<HttpStatus> deleteAllTutorials() {
+//     tutorialRepository.deleteAll();
+    
+//     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//   }
+
+//   @GetMapping("/tutorials/published")
+//   public ResponseEntity<List<Tutorial>> findByPublished() {
+//     List<Tutorial> tutorials = tutorialRepository.findByPublished(true);
+
+//     if (tutorials.isEmpty()) {
+//       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//     }
+    
+//     return new ResponseEntity<>(tutorials, HttpStatus.OK);
+//   }
+// }
 
 }
