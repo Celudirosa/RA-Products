@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -103,5 +105,37 @@ public class PresentacionController {
 
         return new ResponseEntity<>(presentacion, HttpStatus.CREATED);
     }
+
+    @PutMapping("/presentaciones/{id}")
+    public ResponseEntity<Presentacion> updatePresentacion(
+        @PathVariable("id") int id,
+        @RequestBody Presentacion presentacionRequest) {
+            Presentacion presentacion = presentacionRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("PresentacionId " + id + " not found"));
+
+            presentacion.setName(presentacionRequest.getName());
+
+            return new ResponseEntity<>(presentacionRepository.save(presentacion), HttpStatus.OK);
+        }
+
+
+//   @DeleteMapping("/tutorials/{tutorialId}/tags/{tagId}")
+//   public ResponseEntity<HttpStatus> deleteTagFromTutorial(@PathVariable(value = "tutorialId") Long tutorialId, @PathVariable(value = "tagId") Long tagId) {
+//     Tutorial tutorial = tutorialRepository.findById(tutorialId)
+//         .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId));
+    
+//     tutorial.removeTag(tagId);
+//     tutorialRepository.save(tutorial);
+    
+//     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//   }
+  
+//   @DeleteMapping("/tags/{id}")
+//   public ResponseEntity<HttpStatus> deleteTag(@PathVariable("id") long id) {
+//     tagRepository.deleteById(id);
+
+//     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//   }
+// }
 
 }
