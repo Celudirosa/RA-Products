@@ -1,7 +1,6 @@
 package com.example.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,7 +43,7 @@ public class Presentacion implements Serializable {
             CascadeType.MERGE
     }, mappedBy = "presentaciones")
     @JsonIgnore
-    private Set<Producto> productos = new HashSet<>();
+    private Set<Producto> productos;
 
     public void setPresentacion(Set<Producto> productos) {
         this.productos = productos;

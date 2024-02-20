@@ -1,7 +1,6 @@
 package com.example.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -54,9 +53,17 @@ public class Producto implements Serializable {
         joinColumns = { @JoinColumn(name = "producto_id") },
         inverseJoinColumns = { @JoinColumn(name = "presentacion_id") 
     })
-    private Set<Presentacion> presentaciones = new HashSet<>();
+    // si no tuviera las anotaciones, tendria un null 
+    // y no se le podria aplicar los metodos
+    // lombok entiende que hay que inicianizarlo 
+    // y no hay que iniciarlo manualmente
+    private Set<Presentacion> presentaciones;
 
-    // Método para agregar una presentación al conjunto de presentaciones
+    // ------------------metodos------------------
+    // como es una relacion many to many, necesitamos los metodos
+    // para añadir y eliminar las presentaciones
+
+    // metodo para agregar una presentacion al conjunto de presentaciones
     public void addPresentacion(Presentacion presentacion) {
         this.presentaciones.add(presentacion);
         presentacion.getProductos().add(this);
@@ -64,7 +71,9 @@ public class Producto implements Serializable {
 
     // metodo para eliminar una presentacion a un producto concreto
     public void removePresentacion(int presentacionId) {
-        Presentacion presentacion = this.presentaciones.stream().filter(t -> t.getId() == presentacionId).findFirst().orElse(null);
+        Presentacion presentacion = this.presentaciones.stream()
+            .filter(p -> p.getId() == presentacionId).findFirst().orElse(null);
+
         if (presentacion != null) {
             this.presentaciones.remove(presentacion);
             presentacion.getProductos().remove(this);

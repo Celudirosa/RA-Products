@@ -28,11 +28,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductoController {
 
+    // inyeccion por constructor, el autowired ya no se usa tanto
     private final ProductoRepository productoRepository;
 
     @GetMapping("/productos")
     public ResponseEntity<List<Producto>> getAllProductos(
-        @RequestParam(required = false) String name) {
+            @RequestParam(required = false) String name) {
 
         List<Producto> productos = new ArrayList<Producto>();
 
@@ -52,7 +53,7 @@ public class ProductoController {
 
     @GetMapping("/productos/{id}")
     public ResponseEntity<Producto> getProductoById(
-        @PathVariable("id") int id) {
+            @PathVariable("id") int id) {
 
         Producto producto = productoRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("Not found Producto with id = " + id)
@@ -64,18 +65,10 @@ public class ProductoController {
 
     @PostMapping("/productos")
     public ResponseEntity<Producto> createProducto(
-        @RequestBody Producto producto) {
+            @RequestBody Producto producto) {
 
         @SuppressWarnings("null")
-        Producto _producto = productoRepository.save(
-            Producto.builder()
-                .name(producto.getName())
-                .description(producto.getDescription())
-                .stock(producto.getStock())
-                .price(producto.getPrice())
-                .presentaciones(producto.getPresentaciones())
-                .build()
-        );
+        Producto _producto = productoRepository.save(producto);
 
         return new ResponseEntity<>(_producto, HttpStatus.CREATED);
 
@@ -83,9 +76,9 @@ public class ProductoController {
 
     @PutMapping("/productos/{id}")
     public ResponseEntity<Producto> updateProducto(
-        @PathVariable("id") int id,
-        @RequestBody Producto producto
-    ) {
+            @PathVariable("id") int id,
+            @RequestBody Producto producto) {
+
         Producto _producto = productoRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("Nor found Producto with id = " + id));
         
@@ -101,7 +94,7 @@ public class ProductoController {
 
     @DeleteMapping("/productos/{id}")
     public ResponseEntity<HttpStatus> deleteProducto(
-        @PathVariable("id") int id) {
+            @PathVariable("id") int id) {
 
         productoRepository.deleteById(id);
 

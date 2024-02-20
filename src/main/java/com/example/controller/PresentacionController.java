@@ -34,6 +34,7 @@ public class PresentacionController {
 
     @GetMapping("/presentaciones")
     public ResponseEntity<List<Presentacion>> getAllDescripciones() {
+
         List<Presentacion> presentaciones = new ArrayList<>();
 
         presentacionRepository.findAll().forEach(presentaciones::add);
@@ -50,27 +51,32 @@ public class PresentacionController {
     @GetMapping("/productos/{productoId}/presentaciones")
     public ResponseEntity<List<Presentacion>> getAllPresentacionesByProductoId(
             @PathVariable(value = "productoId") Integer productoId) {
+
         if (!productoRepository.existsById(productoId)) {
             throw new ResourceNotFoundException("Not found Producto with id = " + productoId);
         }
 
         List<Presentacion> presentaciones = presentacionRepository.findPresentacionesByProductosId(productoId);
         return new ResponseEntity<>(presentaciones, HttpStatus.OK);
+
     }
 
     @GetMapping("/presentaciones/{id}")
     public ResponseEntity<Presentacion> getPresentacionById(@PathVariable(value = "id") Integer id) {
+
         @SuppressWarnings("null")
         Presentacion presentacion = presentacionRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Not found Presentacion with id = " + id));
 
         return new ResponseEntity<>(presentacion, HttpStatus.OK);
+
     }
 
     @SuppressWarnings("null")
     @GetMapping("/presentaciones/{presentacionId}/productos")
     public ResponseEntity<List<Producto>> getAllProductosByPresentacionId(
             @PathVariable(value = "presentacionId") Integer presentacionId) {
+
         if (!presentacionRepository.existsById(presentacionId)) {
             throw new ResourceNotFoundException("Not found Presentacion  with id = " + presentacionId);
         }
@@ -78,6 +84,7 @@ public class PresentacionController {
         List<Producto> productos = productoRepository.findProductosByPresentacionesId(presentacionId);
 
         return new ResponseEntity<>(productos, HttpStatus.OK);
+
     }
 
     @PostMapping("/productos/{productoId}/presentaciones")
@@ -109,23 +116,24 @@ public class PresentacionController {
 
     @PutMapping("/presentaciones/{id}")
     public ResponseEntity<Presentacion> updatePresentacion(
-        @PathVariable("id") int id,
-        @RequestBody Presentacion presentacionRequest) {
+            @PathVariable("id") int id,
+            @RequestBody Presentacion presentacionRequest) {
 
-            Presentacion presentacion = presentacionRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("PresentacionId " + id + " not found"));
+        Presentacion presentacion = presentacionRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("PresentacionId " + id + " not found"));
 
-            presentacion.setName(presentacionRequest.getName());
+        presentacion.setName(presentacionRequest.getName());
 
-            return new ResponseEntity<>(presentacionRepository.save(presentacion), HttpStatus.OK);
+        return new ResponseEntity<>(presentacionRepository.save(presentacion), HttpStatus.OK);
 
     }
 
     @DeleteMapping("/productos/{productoId}/presentaciones/{presentacionId}")
-        public ResponseEntity<HttpStatus> deletePresentacionFromProducto(
+    public ResponseEntity<HttpStatus> deletePresentacionFromProducto(
             @PathVariable(value = "productoId") Integer productoId, 
             @PathVariable(value = "presentacionId") Integer presentacionId) {
 
+        @SuppressWarnings("null")
         Producto producto = productoRepository.findById(productoId)
             .orElseThrow(() -> new ResourceNotFoundException("Not found Producto with id = " + productoId));
     
@@ -133,10 +141,12 @@ public class PresentacionController {
         productoRepository.save(producto);
     
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 
     @DeleteMapping("/presentaciones/{id}")
     public ResponseEntity<HttpStatus> deletePresentacion(@PathVariable("id") int id) {
+
         presentacionRepository.deleteById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
