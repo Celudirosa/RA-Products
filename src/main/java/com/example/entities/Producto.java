@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -34,7 +35,11 @@ public class Producto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NonNull
     private String name;
+
+    @NonNull
     private String description;
 
     private int stock;
@@ -50,5 +55,20 @@ public class Producto implements Serializable {
         inverseJoinColumns = { @JoinColumn(name = "presentacion_id") 
     })
     private Set<Presentacion> presentaciones = new HashSet<>();
+
+    // Método para agregar una presentación al conjunto de presentaciones
+    public void addPresentacion(Presentacion presentacion) {
+        this.presentaciones.add(presentacion);
+        presentacion.getProductos().add(this);
+    }
+
+    // metodo para eliminar una presentacion a un producto concreto
+    public void removePresentacion(int presentacionId) {
+        Presentacion presentacion = this.presentaciones.stream().filter(t -> t.getId() == presentacionId).findFirst().orElse(null);
+        if (presentacion != null) {
+            this.presentaciones.remove(presentacion);
+            presentacion.getProductos().remove(this);
+        }
+    }
 
 }

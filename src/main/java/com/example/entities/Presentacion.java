@@ -46,4 +46,8 @@ public class Presentacion implements Serializable {
     @JsonIgnore
     private Set<Producto> productos = new HashSet<>();
 
+    public void setPresentacion(Set<Producto> productos) {
+        this.productos = productos;
+    }  
+
 }
