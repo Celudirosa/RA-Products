@@ -104,38 +104,43 @@ public class PresentacionController {
             }).orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + productoId));
 
         return new ResponseEntity<>(presentacion, HttpStatus.CREATED);
+
     }
 
     @PutMapping("/presentaciones/{id}")
     public ResponseEntity<Presentacion> updatePresentacion(
         @PathVariable("id") int id,
         @RequestBody Presentacion presentacionRequest) {
+
             Presentacion presentacion = presentacionRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("PresentacionId " + id + " not found"));
 
             presentacion.setName(presentacionRequest.getName());
 
             return new ResponseEntity<>(presentacionRepository.save(presentacion), HttpStatus.OK);
-        }
 
+    }
 
-//   @DeleteMapping("/tutorials/{tutorialId}/tags/{tagId}")
-//   public ResponseEntity<HttpStatus> deleteTagFromTutorial(@PathVariable(value = "tutorialId") Long tutorialId, @PathVariable(value = "tagId") Long tagId) {
-//     Tutorial tutorial = tutorialRepository.findById(tutorialId)
-//         .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId));
+    @DeleteMapping("/productos/{productoId}/presentaciones/{presentacionId}")
+        public ResponseEntity<HttpStatus> deletePresentacionFromProducto(
+            @PathVariable(value = "productoId") Integer productoId, 
+            @PathVariable(value = "presentacionId") Integer presentacionId) {
+
+        Producto producto = productoRepository.findById(productoId)
+            .orElseThrow(() -> new ResourceNotFoundException("Not found Producto with id = " + productoId));
     
-//     tutorial.removeTag(tagId);
-//     tutorialRepository.save(tutorial);
+        producto.removePresentacion(presentacionId);
+        productoRepository.save(producto);
     
-//     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//   }
-  
-//   @DeleteMapping("/tags/{id}")
-//   public ResponseEntity<HttpStatus> deleteTag(@PathVariable("id") long id) {
-//     tagRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
-//     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//   }
-// }
+    @DeleteMapping("/presentaciones/{id}")
+    public ResponseEntity<HttpStatus> deletePresentacion(@PathVariable("id") int id) {
+        presentacionRepository.deleteById(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+    }
 
 }

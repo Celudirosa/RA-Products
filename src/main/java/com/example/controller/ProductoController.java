@@ -3,7 +3,6 @@ package com.example.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,7 +30,7 @@ public class ProductoController {
 
     private final ProductoRepository productoRepository;
 
-    @GetMapping("/tutorials")
+    @GetMapping("/productos")
     public ResponseEntity<List<Producto>> getAllProductos(
         @RequestParam(required = false) String name) {
 

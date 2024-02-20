@@ -61,4 +61,14 @@ public class Producto implements Serializable {
         this.presentaciones.add(presentacion);
         presentacion.getProductos().add(this);
     }
+
+    // metodo para eliminar una presentacion a un producto concreto
+    public void removePresentacion(int presentacionId) {
+        Presentacion presentacion = this.presentaciones.stream().filter(t -> t.getId() == presentacionId).findFirst().orElse(null);
+        if (presentacion != null) {
+            this.presentaciones.remove(presentacion);
+            presentacion.getProductos().remove(this);
+        }
+    }
+
 }
